@@ -1,0 +1,8 @@
+{
+  "name": "undetectproxy",
+  "version": "0.0.1",
+  "dependencies": {
+    "debug": "^3.1.0",
+    "url-parse": "^1.4.3"
+  }
+}
