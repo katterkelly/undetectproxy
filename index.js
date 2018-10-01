@@ -100,12 +100,17 @@ function start(options, cb) {
                                 });
                             });
                             if(ipaddress=== null) return onClose();
+                            let request = "";
                             connectData = [];
                             connectData.push(reqMethod[1]);
                             connectData.push(ipaddress+':'+port);
                             connectData.push(reqMethod[3]);
 
-                            let request =connectData.join(' ') + "\nProxy-Connection: Keep-Alive\n\n";
+
+                            request +=connectData.join(' ')+"\n";
+                            if(typeof options.auth === "object") request+= ('Proxy-Authorization: Basic '+Buffer.from(options.auth.username+":"+options.auth.password).toString('base64')+"\n");
+
+                            request +=  "\nProxy-Connection: Keep-Alive\n\n";
                             debug(request);
                             dstSock.write(request);
                             dstSock.pipe(socket).pipe(dstSock);
@@ -120,12 +125,15 @@ function start(options, cb) {
                             });
                             if(ipaddress=== null) return onClose();
                             if(url.port === '') url.port = 80;
+                            let request = "";
                             connectData = [];
                             connectData.push('CONNECT');
                             connectData.push(ipaddress+':'+url.port);
                             connectData.push(reqMethod[3]);
 
-                            let request =connectData.join(' ') + "\nProxy-Connection: Keep-Alive\n\n";
+                            request +=connectData.join(' ')+"\n";
+                            if(typeof options.auth === "object") request+= ('Proxy-Authorization: Basic '+Buffer.from(options.auth.username+":"+options.auth.password).toString('base64')+"\n");
+                            request +=  "\nProxy-Connection: Keep-Alive\n\n";
                             debug(request);
                             dstSock.write(request);
                             dstSock.once('data', function (datae) {
